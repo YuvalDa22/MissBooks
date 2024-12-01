@@ -218,3 +218,21 @@ a.active {
 		color: var(--clr2bg-light);
 	}
 }
+
+.serious-reading{
+color: red;
+font-style: bold;
+background-color: antiquewhite;
+}
+.decent-reading{
+color: yellow;
+background-color: antiquewhite;
+}
+.light-reading{
+color: green;
+background-color: antiquewhite;
+}
+.on-sale{
+	color: red;
+	font-style: bold;
+}
