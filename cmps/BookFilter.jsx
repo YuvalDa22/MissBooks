@@ -30,17 +30,17 @@ export function BookFilter({ defaultFilter, onSetFilter }) {
         onSetFilter(filterByToEdit)
     }
 
-    const { txt, amount } = filterByToEdit
+    const { title, amount, authors } = filterByToEdit
     return (
         <section className="book-filter">
             <h2>Filter Our Books</h2>
             <form onSubmit={onSubmitFilter}>
-                <label htmlFor="txt">Title</label>
-                <input value={txt} onChange={handleChange} type="text" name="txt" id="txt" />
-
+                <label htmlFor="title">Title</label>
+                <input value={title} onChange={handleChange} type="text" name="title" id="title" />
                 <label htmlFor="amount">Amount</label>
                 <input value={amount} onChange={handleChange} type="number" name="amount" id="amount" />
-
+                <label htmlFor="authors">Autors</label>
+                <input value={authors} onChange={handleChange} type="text" name="authors" id="authors" />
                 <button>Submit</button>
             </form>
         </section>
