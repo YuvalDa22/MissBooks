@@ -1,6 +1,8 @@
-import { BookPreview } from "../cmps/BookPreview.jsx";
+import { BookPreview } from "./BookPreview.jsx";
 const { Link } = ReactRouterDOM
 export function BookList({ books, onRemoveBook }) {
+
+    //TODO :  fix details and edit
     return (
         <ul className="book-list">
             {books.map(book =>

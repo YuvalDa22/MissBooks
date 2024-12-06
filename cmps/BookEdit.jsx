@@ -36,7 +36,7 @@ export function BookEdit() {
         setBookToEdit((prevBook) => ({ ...prevBook, [field]: value }))
     }
 
-    function handleBookPrice({target}) { //destructiong ev
+    function handleBookPrice({target}) { //destructing event
         let {value} = target
         let updatedListPrice = {...bookToEdit.listPrice, amount: +value}
         setBookToEdit((prevBook) => ({...prevBook, updatedListPrice}))
