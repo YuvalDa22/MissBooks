@@ -1,5 +1,5 @@
-import { BookFilter } from "./BookFilter.jsx";
-import { BookList } from "./BookList.jsx";
+import { BookFilter } from "../cmps/BookFilter.jsx";
+import { BookList } from "../cmps/BookList.jsx";
 import { bookService } from "../services/book.service.js";
 const { Link } = ReactRouterDOM;
 
@@ -26,9 +26,9 @@ export function BookIndex() {
     bookService
       .remove(bookId)
       .then(() => {
-        setBooks(books => books.filter(book => book.id !== bookId));
+        setBooks((books) => books.filter((book) => book.id !== bookId));
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("Problems removing book:", err);
       });
   }
@@ -40,15 +40,10 @@ export function BookIndex() {
   if (!books) return <div>Loading...</div>;
   return (
     <section className="book-index">
-      <BookFilter defaultFilter={filterBy} onSetFilter={onSetFilter} />
-
       <section>
-        <Link to="/book/edit">Add Book</Link>
+        <BookFilter defaultFilter={filterBy} onSetFilter={onSetFilter} />
       </section>
-      <BookList 
-      books={books} 
-      onRemoveBook={onRemoveBook} 
-      />
+      <BookList books={books} onRemoveBook={onRemoveBook} />
     </section>
   );
 }

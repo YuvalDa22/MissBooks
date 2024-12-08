@@ -45,12 +45,8 @@ p {
 
 a {
     text-decoration: none;
-    color: var(--accent-color);
+    color: white;
     transition: color 0.3s;
-}
-
-a:hover {
-    color: var(--highlight-color);
 }
 
 /* Buttons */
@@ -80,6 +76,7 @@ button:hover {
 }
 
 /* Components */
+@import "cmps/app-header.css";
 
 /* Book Preview Card */
 .book-preview {
@@ -117,10 +114,6 @@ button:hover {
 .book-preview .price {
     font-size: 1rem;
     color: var(--highlight-color);
-}
-
-.book-preview button {
-    align-self: center;
 }
 
 /* Reading Levels */

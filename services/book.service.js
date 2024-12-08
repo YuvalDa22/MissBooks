@@ -13,17 +13,37 @@ export const bookService = {
   save,
   getEmptyBook,
   getDefaultFilter,
+  getFilterFromSrcParams,
+  getListPriceClass,
 };
 
 function query(filterBy = {}) {
   return storageService.query(BOOK_KEY)
   .then(books => {
-    if (filterBy.txt) {
-      const regExp = new RegExp(filterBy.txt, "i");
+    if (filterBy.title) {
+      const regExp = new RegExp(filterBy.title, "i");
       books = books.filter(book => regExp.test(book.title));
     }
     if (filterBy.amount) {
-      books = books.filter(book => book.amount >= filterBy.amount);
+      books = books.filter(book => book.listPrice.amount >= filterBy.amount);
+    }
+    if(filterBy.subtitle) {
+      const regExp = new RegExp(filterby.subtitle,"i");
+      books= books.filter(book => regExp.test(book.subtitle))
+    }
+    if(filterBy.pageCount) {
+      books = books.filter(book => book.pageCount >= filterBy.pageCount)
+    }
+    if(filterBy.authors){
+      const regExp = new regExp(filterBy.authors, "i")
+      books = books.filter(book => regExp.test(book.authors))
+    }
+    if(filterBy.categories){
+      const regExp = new regExp(filterBy.categories, "i")
+      books = books.filter(book => regExp.test(book.categories))
+    }
+    if(filterBy.onSale){
+      books = books.filter(book => book.listPrice.isOnSale === filterBy.onSale)
     }
     return books;
   });
@@ -70,6 +90,16 @@ function getEmptyBook() {
 
 }
 
+function getFilterFromSrcParams(srcParams) {
+  const title = srcParams.get('title') || ''
+  const amount = srcParams.get('amount') || ''
+  return {
+      title,
+      amount
+  }
+
+}
+
 function _setNextPrevBookId(book) {
   return query().then((books) => {
       const bookIdx = books.findIndex((currBook) => currBook.id === book.id)
@@ -90,4 +120,11 @@ function _createBooks(){
     utilService.saveToStorage(BOOK_KEY, books)
   }
   console.log(books)
+}
+
+function getListPriceClass(book) {
+  let listPriceClass = ''
+  if (book.listPrice.amount < 11) listPriceClass = 'low'
+  if (book.listPrice.amount > 16) listPriceClass = 'high'
+  return listPriceClass
 }

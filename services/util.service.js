@@ -8,6 +8,8 @@ export const utilService = {
     getMonthName,
     animateCSS,
     debounce,
+    getTruthyValues,
+    animateCSS,
 }
 
 function makeId(length = 6) {
@@ -82,4 +84,31 @@ function debounce(func, time = 500) {
             func(...args)
         }, time);
     }
+}
+
+function getTruthyValues(obj) {
+    const newObj = {}
+    for (const key in obj) {
+        const value = obj[key]
+        if (value || value === 0) {
+            newObj[key] = value
+        }
+    }
+    return newObj
+}
+
+function animateCSS(el, animation = '', isRemoveClass = true) {
+    const prefix = 'animate__'
+    return new Promise((resolve, reject) => {
+        const animationName = `${prefix}${animation}`
+        el.classList.add(`${prefix}animated`, animationName)
+
+        function handleAnimationEnd(event) {
+            event.stopPropagation()
+            if (isRemoveClass) el.classList.remove(`${prefix}animated`, animationName)
+            resolve('Animation ended')
+        }
+
+        el.addEventListener('animationend', handleAnimationEnd, { once: true })
+    })
 }
