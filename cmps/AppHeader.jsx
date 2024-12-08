@@ -1,11 +1,12 @@
 const {  NavLink, useNavigate } = ReactRouterDOM
-const navigate = useNavigate()
-
-function onBack() {
-    navigate(-1)
-}
 
 export function AppHeader() {
+
+    const navigate = useNavigate()
+
+    function onBack() {
+        navigate(-1)
+    }
 
     return (
         <header className="app-header full main-layout">
