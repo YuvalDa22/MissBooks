@@ -14,3 +14,10 @@
     background-color: var(--clr1bg);
     padding-block: 0.2em;
 }
+
+.book-list section {
+    display: flex; 
+    justify-content: flex-end; 
+    gap: 1px; 
+    align-items: center; 
+}

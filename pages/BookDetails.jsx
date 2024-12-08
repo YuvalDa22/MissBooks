@@ -64,25 +64,26 @@ export function BookDetails() {
 
   return (
     <section className="book-details">
-      <h1>Book Title: {title}</h1>
-      <h3>Book Author: {authors.join(",")}</h3>
-      <h3>
+      <h3>Book Title: {title}</h3>
+      <h4>Book Author: {authors.join(",")}</h4>
+      <h4>
         Book Price:
         <span className={listPriceClass}>
           {listPriceClass.amount} {listPriceClass.currencyCode}
         </span>
-      </h3>
-      <h3>Publish year: {publishedDate} </h3>
-      <h3>Categories: {categories.join(",")}</h3>
-      <h3>Number op Pages: {pageCount}</h3>
-      <h3>Language: {language}</h3>
-      <h3>Subtitle: {subtitle} </h3>
-      <h3>
+      </h4>
+      <h4>Publish year: {publishedDate} </h4>
+      <h4>Categories: {categories.join(",")}</h4>
+      <h4>Number op Pages: {pageCount}</h4>
+      <h4>Language: {language}</h4>
+      <h4>Subtitle: {subtitle} </h4>
+      <h4>
         Book Description: <LongTxt txt={description} length={100}/>
-      </h3>
+      </h4>
       <img src={`../assets/img/${bookImg}.jpg`} alt={`${title} image`} />
-      <button onClick={onBack}>Back</button>
+      
       <section>
+        <button onClick={onBack}>Back</button>
         <button>
           <Link to={`/book/${prevBookId}`}>Prev Book</Link>
         </button>
