@@ -1,0 +1,23 @@
+
+.about > nav {
+    margin-top: 3rem;
+}
+
+.about nav {
+    display: flex;
+    gap: 1em;
+}
+
+
+.about .dynamic-cmps h2 {
+    cursor: pointer;
+    transition: font-size .15s;
+}
+
+.about .dynamic-cmps h2::selection {
+    display: none;
+}
+
+.about .dynamic-cmps h2:active {
+    font-size: 1.5rem;
+}

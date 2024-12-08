@@ -34,8 +34,9 @@ export function BookFilter({ defaultFilter, onSetFilter }) {
 
   const { title, amount, authors, subtitle, pageCount, categories, onSale } = filterByToEdit;
   return (
+    <div>
     <section className="book-filter">
-      <h2>Filter Our Books</h2>
+      <h3>Filter Our Books</h3>
       <form onSubmit={onSubmitFilter}>
         <label htmlFor="title">Title</label>
         <input
@@ -94,8 +95,9 @@ export function BookFilter({ defaultFilter, onSetFilter }) {
         />
         <button>Submit</button>
       </form>
+      </section>
       <button className="btn" onClick={() =>
       navigate('/book/edit')}>Add Book</button>
-    </section>
+    </div>
   );
 }

@@ -25,9 +25,9 @@ export function BookPreview({ book }) {
     <div>
       <div>
         <article className="book-preview">
-          <h2>Title: {book.title} </h2>
-          <h4>Author: {book.authors} </h4>
-          <h4
+          <h3>Title: {book.title} </h3>
+          <h5>Author: {book.authors} </h5>
+          <h5
             style={{
               color:
                 book.listPrice.amount >= 150
@@ -38,20 +38,19 @@ export function BookPreview({ book }) {
             }}
           >
             Price: {book.listPrice.amount} {book.listPrice.currencyCode}
-          </h4>
-          <h4 className={classNamePages}>
+          </h5>
+          <h5 className={classNamePages}>
             {`Number of pages: ${book.pageCount} - ${classNamePages}`}
-          </h4>
-          <h4 className={classNamePublishDate}>
+          </h5>
+          <h5 className={classNamePublishDate}>
             {`Publish Date: ${book.publishedDate} - ${classNamePublishDate}`}
-          </h4>
-          <h4
+          </h5>
+          <h3
             className="on-sale"
             style={{ color: book.listPrice.isOnSale ? "red" : "transparent" }}
           >
-            {" "}
             {`${classNameSale}!`}
-          </h4>
+          </h3>
           <img
             src={`../assets/img/${bookImg}.jpg`}
             alt={`${book.title} image`}
