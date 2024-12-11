@@ -113,9 +113,18 @@ function addReview(bookId, review) {
 }
 
 function removeReview(bookId, reviewId) {
-  get(bookId).then((book) => {
-    book.reviews = book.reviews.filter((review) => review.id !== reviewId);
-  });
+  return get(bookId)
+    .then((book) => {
+      if (!book || !book.reviews) {
+        throw new Error("Book or reviews not found");
+      }
+      book.reviews = book.reviews.filter((review) => review.id !== reviewId);
+      return save(book);
+    })
+    .catch((err) => {
+      console.error("Failed to remove review:", err);
+      throw err;
+    });
 }
 
 function _setNextPrevBookId(book) {
@@ -136,7 +145,7 @@ function _createBooks() {
   if (!books || !books.length) {
     books = booksDB;
     utilService.saveToStorage(BOOK_KEY, books);
-  } 
+  }
 }
 
 function getListPriceClass(book) {
