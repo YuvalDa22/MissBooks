@@ -1,5 +1,7 @@
+import { AddReview } from "../cmps/AddReview.jsx";
 import { LongTxt } from "../cmps/LongTxt.jsx";
 import { bookService } from "../services/book.service.js";
+import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js";
 const { useEffect, useState } = React;
 const { useParams, useNavigate, Link } = ReactRouterDOM;
 
@@ -13,45 +15,42 @@ export function BookDetails() {
     loadBooks();
   }, [params.bookId]);
 
-  console.log(params);
-
   function loadBooks() {
     bookService
       .get(params.bookId)
       .then((book) => {
         setBook(book);
-        const { bookImg } = getBookImg(book);
-        setBookImg(bookImg);
+        setBookImg(book.thumbnail);
       })
       .catch((err) => {
         console.log("Problem getting book", err);
+        showErrorMsg("Sorry, couldn't load books");
       });
   }
 
-  function getBookImg(book) {
-    if (!book || !book.thumbnail) {
-      console.error("Invalid book or thumbnail");
-      return { bookImg: null };
-    }
-    //Extract the image number from the thumbnail field
-    const match = book.thumbnail.match(/\/(\d+)\.jpg$/);
-    const bookImg = match ? parseInt(match[1], 10) : null;
-    return {
-      bookImg,
-    };
+  function saveReview(review) {
+    bookService
+      .addReview(book.id, review)
+      .then((updatedReviews) => {
+        setBook({ ...book, reviews: updatedReviews });
+        showSuccessMsg("Review added successfully");
+      })
+      .catch((err) => {
+        console.error("Failed to save review:", err);
+        showErrorMsg("Failed to save review, please try again.");
+      });
   }
 
   function onBack() {
     navigate("/book");
   }
 
-  console.log("Render");
-
-  if (!book || bookImg === null) return <div>Details Loading...</div>;
-  const listPriceClass = bookService.getListPriceClass(book); 
-  const description = book.description || '';
+  if (!book) return <div>Details Loading...</div>;
+  const listPriceClass = bookService.getListPriceClass(book);
   const {
+    id,
     title,
+    description,
     subtitle,
     authors,
     publishedDate,
@@ -60,6 +59,7 @@ export function BookDetails() {
     language,
     prevBookId,
     nextBookId,
+    reviews,
   } = book;
 
   return (
@@ -78,18 +78,37 @@ export function BookDetails() {
       <h4>Language: {language}</h4>
       <h4>Subtitle: {subtitle} </h4>
       <h4>
-        Book Description: <LongTxt txt={description} length={100}/>
+        Book Description: <LongTxt children={description} length={100} />
       </h4>
-      <img src={`../assets/img/${bookImg}.jpg`} alt={`${title} image`} />
-      
+      <h4>
+        <AddReview bookId={id} onSaveReview={saveReview} />
+      </h4>
+      <h4>Reviews:</h4>
+      {(reviews && reviews.length > 0 )? (
+        reviews.map((review, idx) => (
+          <div key={idx} className="review">
+            <p>
+              {review.fullName}:{review.rating} Stars
+            </p>
+          </div>
+        ))
+      ) : (
+        <p>No reviews yet. Be the first to review this book!</p>
+      )}
+      {bookImg && <img src={bookImg} alt={`${title} cover`} />}
+
       <section>
         <button onClick={onBack}>Back</button>
-        <button>
-          <Link to={`/book/${prevBookId}`}>Prev Book</Link>
-        </button>
-        <button>
-          <Link to={`/book/${nextBookId}`}>Next Book</Link>
-        </button>
+        {prevBookId && (
+          <button>
+            <Link to={`/book/${prevBookId}`}>Prev Book</Link>
+          </button>
+        )}
+        {nextBookId && (
+          <button>
+            <Link to={`/book/${nextBookId}`}>Next Book</Link>
+          </button>
+        )}
       </section>
     </section>
   );
