@@ -41,6 +41,22 @@ export function BookDetails() {
       });
   }
 
+  function onRemoveReview(reviewId) {
+    bookService
+      .removeReview(book.id, reviewId)
+      .then(() => {
+        setBook((prevBook) => ({
+          ...prevBook,
+          reviews: prevBook.reviews.filter((review) => review.id !== reviewId),
+        }));
+        showSuccessMsg("Review removed successfully");
+      })
+      .catch((err) => {
+        console.error("Failed to remove review:", err);
+        showErrorMsg("Couldn't remove review, please try again.");
+      });
+  }
+
   function onBack() {
     navigate("/book");
   }
@@ -84,14 +100,24 @@ export function BookDetails() {
         <AddReview bookId={id} onSaveReview={saveReview} />
       </h4>
       <h4>Reviews:</h4>
-      {(reviews && reviews.length > 0 )? (
-        reviews.map((review, idx) => (
-          <div key={idx} className="review">
-            <p>
-              {review.fullName}:{review.rating} Stars
-            </p>
-          </div>
-        ))
+      {reviews && reviews.length > 0 ? (
+        <ul className="review-list">
+          {reviews.map((review) => (
+            <li key={review.id}>
+              <button
+                className="review-remove"
+                onClick={() => onRemoveReview(review.id)}
+              >
+                Remove
+              </button>
+              <h4 className="review-fullName">Full Name: {review.fullName}</h4>
+              <h4 className="review-rating">Rating: {review.rating}</h4>
+              <h4 className="review-readAt">
+                Book was read at: {review.readAt}
+              </h4>
+            </li>
+          ))}
+        </ul>
       ) : (
         <p>No reviews yet. Be the first to review this book!</p>
       )}
