@@ -1,0 +1,55 @@
+/* AddReview.css */
+
+
+.add-review-form input[type="range"] {
+    appearance: none;
+    background: #ddd;
+    height: 40px; 
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}
+
+
+.add-review-form input[type="range"]::before {
+    content: "⭐ ⭐ ⭐ ⭐ ⭐";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100%;
+    text-align: justify;
+    font-size: 1.5rem;
+    color: #ccc; 
+    pointer-events: none; 
+    z-index: 0;
+}
+
+
+.add-review-form input[type="range"]::-webkit-slider-runnable-track {
+    background: transparent;
+}
+
+.add-review-form input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #007bff;
+    z-index: 10;
+    position: relative;
+    margin-top: -12px; 
+}
+
+
+.add-review-form .selected-stars {
+    font-size: 1.5rem;
+    color: #007bff; 
+    position: absolute;
+    top: 10px;
+    left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
