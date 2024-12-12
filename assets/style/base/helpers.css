@@ -1,3 +1,5 @@
+
+
 /* flex helpers */
 
 .flex {
@@ -18,7 +20,7 @@
   
   .flex.align-center{
       align-items: center;
-  }
+  } 
   
   /* text helpers */
   
@@ -28,16 +30,16 @@
   
   /* list helpers */
   
-  .clean-list {
+   .clean-list {
       padding: 0;
       margin: 0;
       list-style-type: none;
-  }
+  }  
   
   /* font awsome */
   
-  .fa {
-      font-family: "Gill Sans", sans-serif;
+   .fa {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
   }
   
   .fa.fa-facebook::before {
@@ -54,4 +56,4 @@
   
   .fa.fa-behance::before {
       content: "\f1b4";
-  }
+  } 

@@ -40,7 +40,7 @@ export function AddReview({ bookId, onSaveReview }) {
 
   return (
     <section className="add-review">
-      <h4>Add a Review</h4>
+      <h4>Add a Review!</h4>
       <form className="add-review-form" onSubmit={onAddReview}>
         <div>
           <label htmlFor="fullName">Full Name:</label>
@@ -55,7 +55,7 @@ export function AddReview({ bookId, onSaveReview }) {
           />
         </div>
         <div>
-          <label htmlFor="rating">Rating</label>
+          <label htmlFor="rating">Rating:</label>
           <div>
             <div className="selected-start">{getSelectedStart(rating)}</div>
             <input
