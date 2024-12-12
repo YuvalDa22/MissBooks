@@ -40,7 +40,11 @@ export function BookDetails() {
         showErrorMsg("Failed to save review, please try again.");
       });
   }
-
+  
+  const getSelectedStart = (value) => {
+    return "⭐".repeat(value);
+  };
+  
   function onRemoveReview(reviewId) {
     bookService
       .removeReview(book.id, reviewId)
@@ -63,6 +67,7 @@ export function BookDetails() {
 
   if (!book) return <div>Details Loading...</div>;
   const listPriceClass = bookService.getListPriceClass(book);
+  console.log(listPriceClass)
   const {
     id,
     title,
@@ -76,6 +81,7 @@ export function BookDetails() {
     prevBookId,
     nextBookId,
     reviews,
+    listPrice
   } = book;
 
   return (
@@ -85,17 +91,18 @@ export function BookDetails() {
       <h4>
         Book Price:
         <span className={listPriceClass}>
-          {listPriceClass.amount} {listPriceClass.currencyCode}
+         {" "} {listPrice.amount} {listPrice.currencyCode}
         </span>
       </h4>
       <h4>Publish year: {publishedDate} </h4>
       <h4>Categories: {categories.join(",")}</h4>
       <h4>Number op Pages: {pageCount}</h4>
       <h4>Language: {language}</h4>
-      <h4>Subtitle: {subtitle} </h4>
+      <h4>Subtitle: <div>{subtitle}</div>  </h4>
       <h4>
         Book Description: <LongTxt children={description} length={100} />
       </h4>
+      {bookImg && <img src={bookImg} alt={`${title} cover`} />}
       <h4>
         <AddReview bookId={id} onSaveReview={saveReview} />
       </h4>
@@ -104,24 +111,22 @@ export function BookDetails() {
         <ul className="review-list">
           {reviews.map((review) => (
             <li key={review.id}>
+              <h5>Full Name: {review.fullName}</h5>
+              <h5>Rating: {getSelectedStart(review.rating)}</h5>
+              <h5>Book was read at: {review.readAt}</h5>
               <button
                 className="review-remove"
                 onClick={() => onRemoveReview(review.id)}
               >
                 Remove
               </button>
-              <h4 className="review-fullName">Full Name: {review.fullName}</h4>
-              <h4 className="review-rating">Rating: {review.rating}</h4>
-              <h4 className="review-readAt">
-                Book was read at: {review.readAt}
-              </h4>
             </li>
           ))}
         </ul>
       ) : (
         <p>No reviews yet. Be the first to review this book!</p>
       )}
-      {bookImg && <img src={bookImg} alt={`${title} cover`} />}
+      
 
       <section>
         <button onClick={onBack}>Back</button>

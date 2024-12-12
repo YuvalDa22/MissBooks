@@ -1,6 +1,9 @@
+
+
+
 .long-txt p.txt {
     margin-bottom: .45em;
-    font-size: 1em;
+    font-size: 0.8rem;
     font-weight: 450;
 }
 
@@ -9,7 +12,7 @@
     margin: 0;
     padding: 0;
     border: none;
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(16, 38, 236, 0.962);
     font-size: 1em;
     cursor: pointer;
 }
