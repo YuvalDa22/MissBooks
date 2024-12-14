@@ -1,8 +1,12 @@
 import { utilService } from "./util.service.js";
 import { storageService } from "./async-storage.service.js";
 import { booksDB } from "../books.js";
+import axios from 'axios';
+
 
 const BOOK_KEY = "bookDB";
+const CACHE_STORAGE_KEY = "googleBooksCache";
+const gCache = utilService.loadFromStorage(CACHE_STORAGE_KEY) || {};
 _createBooks();
 
 export const bookService = {
@@ -16,7 +20,13 @@ export const bookService = {
   getListPriceClass,
   addReview,
   removeReview,
+  saveGoogleBook,
+  searchGoogleBook,
 };
+
+window.bs = bookService;
+
+// ~~~~~~~~~~~~~~~~~~~~ CRUDL ~~~~~~~~~~~~~~~~~~~~~~
 
 function query(filterBy = {}) {
   return storageService.query(BOOK_KEY).then((books) => {
@@ -52,7 +62,10 @@ function query(filterBy = {}) {
 }
 
 function get(bookId) {
-  return storageService.get(BOOK_KEY, bookId).then(_setNextPrevBookId);
+  return storageService.get(BOOK_KEY, bookId).then((book) => {
+    book = _setNextPrevBookId(book);
+    return book;
+  });
 }
 
 function remove(bookId) {
@@ -66,6 +79,8 @@ function save(book) {
     return storageService.post(BOOK_KEY, book);
   }
 }
+
+// ~~~~~~~~~~~~~~ CRUDL HELPERS ~~~~~~~~~~~~~~
 
 function getDefaultFilter() {
   return { title: "", amount: "" };
@@ -100,6 +115,47 @@ function getFilterFromSrcParams(srcParams) {
   };
 }
 
+function getListPriceClass(book) {
+  let listPriceClass = "";
+  if (book.listPrice.amount < 11) listPriceClass = "low";
+  if (book.listPrice.amount > 16) listPriceClass = "high";
+  return listPriceClass;
+}
+
+// ~~~~~~~~~~~~~~~~~~ Google Books ~~~~~~~~~~~~~~~~~~~~~~`
+function saveGoogleBook(book) {
+  return storageService
+    .post(BOOK_KEY, book, { isCheckExist: true })
+    .catch((err) => {
+      if (err && err.isExist) {
+        console.error(`"${book.title}" already in shop`);
+      }
+      throw err;
+    });
+}
+
+function searchGoogleBook(bookName) {
+  if (!bookName) return Promise.resolve();
+  let { data: googleBooks, lastFetched = 0 } = gCache[bookName] || {};
+  const isFetchStillValid = Date.now() - lastFetched < 60000;
+  if (googleBooks && isFetchStillValid) {
+    console.log("data from storage", googleBooks);
+    return Promise.resolve(googleBooks);
+  }
+
+  const url = `https://www.googleapis.com/books/v1/volumes?printType=books&q=${bookName}`;
+  return axios.get(url)
+  .then((res) => {
+    const data = res.data.items;
+    const books = _formatGoogleBooks(data);
+    console.log("data from network", books);
+    _saveDataToCache(bookName, books);
+    return books;
+  });
+}
+
+//~~~~~~~~~~~~~~~~~ Reviews ~~~~~~~~~~~~~~~~~~~~~~~
+
 function addReview(bookId, review) {
   review.id = utilService.makeId();
   return get(bookId)
@@ -127,6 +183,8 @@ function removeReview(bookId, reviewId) {
     });
 }
 
+// ~~~~~~~~~~~~~~~~LOCAL FUNCTIONS~~~~~~~~~~~~~~~~~
+
 function _setNextPrevBookId(book) {
   return query().then((books) => {
     const bookIdx = books.findIndex((currBook) => currBook.id === book.id);
@@ -148,9 +206,33 @@ function _createBooks() {
   }
 }
 
-function getListPriceClass(book) {
-  let listPriceClass = "";
-  if (book.listPrice.amount < 11) listPriceClass = "low";
-  if (book.listPrice.amount > 16) listPriceClass = "high";
-  return listPriceClass;
+function _saveDataToCache(key, data) {
+  gCache[key] = {
+    data,
+    lastFetched: Date.now(),
+  };
+  utilService.saveToStorage(CACHE_STORAGE_KEY, gCache);
+}
+
+function _formatGoogleBooks(googleBooks) {
+  return googleBooks.map((googleBook) => {
+    const { volumeInfo } = googleBook;
+    const book = {
+      id: googleBook.id,
+      title: volumeInfo.title,
+      description: volumeInfo.description,
+      pageCount: volumeInfo.pageCount,
+      authors: volumeInfo.authors,
+      publishedDate: volumeInfo.publishedDate,
+      language: volumeInfo.language,
+      listPrice: {
+        amount: utilService.getRandomIntInclusive(80, 450),
+        currencyCode: "EUR",
+        isOnSale: Math.random() > 0.7,
+      },
+      reviews: [],
+    };
+    if (volumeInfo.imageLinks) book.thumbnail = volumeInfo.imageLinks.thumbnail;
+    return book;
+  });
 }

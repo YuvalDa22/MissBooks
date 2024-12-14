@@ -1,5 +1,6 @@
 import { bookService } from "../services/book.service.js";
 import { showSuccessMsg } from "../services/event-bus.service.js";
+import { BookAdd } from "../cmps/BookAdd.jsx"
 
 const { useState, useEffect } = React;
 const { useNavigate, useParams, useSearchParams } = ReactRouterDOM;
@@ -83,6 +84,8 @@ export function BookEdit() {
     bookToEdit;
   return (
     <section className="book-edit">
+      <h1>Add Google Book</h1>
+      <BookAdd /> 
       <h1>{bookId ? "Edit" : "Add"} Book</h1>
       <form className="book-edit-form" onSubmit={onSaveBook}>
         <label htmlFor="title">Title</label>

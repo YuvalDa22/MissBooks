@@ -29,7 +29,7 @@ export function BookIndex() {
       .remove(bookId)
       .then(() => {
         setBooks((books) => books.filter((book) => book.id !== bookId))
-        console.log(bookId + "removed")
+        console.log(bookId + " removed")
         showSuccessMsg("Book was removed successfully")
       })
       .catch((err) => {
