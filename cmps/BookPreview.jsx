@@ -1,9 +1,4 @@
-import { BookIndex } from "../pages/BookIndex";
-const { Link } = ReactRouterDOM;
-
-
 export function BookPreview({ book }) {
-
   //Extract the image number from the thumbnail field
   const match = book.thumbnail.match(/\/(\d+)\.jpg$/);
   const bookImg = match ? parseInt(match[1], 10) : null;
@@ -57,6 +52,6 @@ export function BookPreview({ book }) {
           />
         </article>
       </div>
-      </div>
-  )
-          }
+    </div>
+  );
+}
