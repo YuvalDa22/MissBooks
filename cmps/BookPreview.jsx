@@ -1,7 +1,10 @@
 export function BookPreview({ book }) {
+
+
+  // TODO: Fix to cases where book has no img
   //Extract the image number from the thumbnail field
-  const match = book.thumbnail.match(/\/(\d+)\.jpg$/);
-  const bookImg = match ? parseInt(match[1], 10) : null;
+    const match = book.thumbnail.match(/\/(\d+)\.jpg$/) || "";
+    const bookImg = match ? parseInt(match[1], 10) : null;
 
   const classNamePages =
     book.pageCount > 500
