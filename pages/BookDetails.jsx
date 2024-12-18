@@ -20,7 +20,7 @@ export function BookDetails() {
       .get(params.bookId)
       .then((book) => {
         setBook(book);
-        setBookImg(book.thumbnail);
+        book.thumbnail ? setBookImg(book.thumbnail) : setBookImg(null)
       })
       .catch((err) => {
         console.log("Problem getting book", err);
